@@ -1,14 +1,40 @@
-spring:
-  cloud:
-    gateway:
-      routes:
-        - id: r1
-          uri: http://localhost:8081/
-          predicates:
-            - Path= /customers/**
-        - id: r2
-          uri: http://localhost:8082/
-          predicates:
-            - Path= /products/**
+#spring:
+#  cloud:
+#    gateway:
+#      routes:
+#        - id: r1
+#          uri: http://localhost:8081/
+#          predicates:
+#            - Path= /customers/**
+#        - id: r2
+#          uri: http://localhost:8082/
+#          predicates:
+#            - Path= /products/**
+#
 
+server:
+  port: 8888
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    discovery:
+      enabled: true
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            provider: keycloak
+            clientId: gateway-app
+            client-secret: 756b0558-018b-4809-b478-bd5b4995d325
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8080/login/oauth2/code/keycloak
+            scope: openid
+keycloak:
+  realm: Ecommerce-realm
+  resource: gateway-app
+  auth-server-url: http://localhost:8080/auth
+  public-client: true
+  principal-attribute: name
 
